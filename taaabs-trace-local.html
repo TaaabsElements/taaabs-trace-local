@@ -1,0 +1,97 @@
+<link rel="import" href="../taaabs-stylesheet-behavior/taaabs-stylesheet-behavior.html">
+
+<dom-module id="taaabs-trace-local">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+
+  <template>
+    <content></content>
+  </template>
+
+  <script>
+    /* global Polymer, Samotraces, TaaabsBehaviors */
+
+    /**
+     * `<taaabs-trace-local>` is a wrapper to hold Polymer Custom Elements for display some graphical representation of a CSV stored Traces.
+     *
+     * This Polymer Custom Element use <content></content> element as an acces point
+     *  for other elements. In index.html, inside `<taaabs-local-trace>` you
+     *  can see how to add elements inside.
+     *
+     * (@polymerBehavior) TaaabsBehaviors.Stylesheet : Polymer Behavior (Mixin)
+     *  We use it to get and apply the style of the visualization.
+     *
+     * @element taaabs-local-trace
+     */
+    Polymer({
+      is: 'taaabs-trace-local',
+      behaviors: [
+        TaaabsBehaviors.Stylesheet
+      ],
+      properties: {
+        timewindow: {
+          type: Object,
+          reflectToAttribute: true,
+          notify: true
+        },
+        timewindowzoom: {
+          type: Object,
+          reflectToAttribute: true,
+          notify: true
+        },
+        trace: {
+          type: Object,
+          notify: true,
+          reflectToAttribute: true,
+          observer: '_tracelChanged'
+        },
+        obselselector: {
+          type: Object,
+          reflectToAttribute: true,
+          notify: true
+        },
+
+        loading: {
+          type: Boolean,
+          notify: true
+        },
+        options: {
+          type: String,
+          notify: true
+        }
+      },
+      ready: function() {
+        this.trace = new Samotraces.LocalTrace();
+        this.obselselector = new Samotraces.Selector('Obsel');
+
+        this.trace.on('beforLoadFile', (function(){
+          this.timewindow = new Samotraces.TimeWindow({start: 0, end: 0});
+          //this.timewindowzoom = new Samotraces.TimeWindow({start: 0, end: 20});
+          this.set('loading', true);
+        }).bind(this));
+
+        this.trace.on('firstObselLocal', (function(e){
+          this.timewindow.set_start(e.data.begin); // jshint ignore:line
+        }).bind(this));
+
+        this.trace.on('LastObselLocal', (function(e){
+          this.timewindow.set_end(e.data.begin); // jshint ignore:line
+          this.timewindowzoom = new Samotraces.TimeWindow({start: e.data.begin-2, end: e.data.begin});
+          this.set('loading', false);
+        }).bind(this));
+      },
+      _tracelChanged: function(){
+        var that = this;
+        that._getStylesheet().then(function(stylesheet) { // jshint ignore:line
+
+          that.set('options', stylesheet);
+        });// jshint ignore:line
+          that.trace.list_obsels(); // jshint ignore:line
+      }
+
+    });
+  </script>
+</dom-module>

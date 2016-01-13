@@ -1,0 +1,28 @@
+{
+  "name": "taaabs-trace-local",
+  "version": "1.0.0",
+  "description": "`<taaabs-trace-local>` is a wrapper to hold Polymer Custom Elements for display some graphical representation of a CSV stored Traces.",
+  "keywords": [
+    "web-components",
+    "polymer",
+    "taaabs"
+  ],
+  "authors": [
+    "TaaabsTeam"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TaaabsElements/taaabs-trace-local.git"
+  },
+  "main": "taaabs-trace-local.html",
+  "license": "https://github.com/TaaabsElements/taaabs-trace-local/LICENSE",
+  "dependencies": {
+    "polymer": "polymer/polymer#^1.0.0",
+		"taaabs-stylesheet-behavior": "https://github.com/TaaabsElements/taaabs-stylesheet-behavior.git"
+  },
+  "devDependencies": {
+    "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "ignore": []
+}
